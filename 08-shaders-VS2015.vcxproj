@@ -38,6 +38,7 @@
     <None Include="..\..\..\bin\resources\shaders\shadow.vert" />
     <None Include="..\..\..\bin\resources\shaders\simple.frag" />
     <None Include="..\..\..\bin\resources\shaders\simple.vert" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>08-shaders</ProjectName>

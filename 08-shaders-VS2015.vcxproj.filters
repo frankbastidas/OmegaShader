@@ -36,5 +36,6 @@
     <None Include="..\..\..\bin\resources\shaders\phong.vert" />
     <None Include="..\..\..\bin\resources\shaders\shadow.frag" />
     <None Include="..\..\..\bin\resources\shaders\shadow.vert" />
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

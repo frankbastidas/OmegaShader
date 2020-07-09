@@ -74,13 +74,18 @@ const double SPHERE_RADIUS = 0.02;
 // DECLARED VARIABLES
 //------------------------------------------------------------------------------
 
+// a world that contains all objects of the virtual environment
+cWorld* world;
+
+// a camera to render the world in the window display
+cCamera* camera;
+
 // four cameras to render the world from different perspectives
-cCamera* cameraMain;
 cCamera* cameraView1;
 cCamera* cameraView2;
 
 // Four colored background
-cBackground* background1;
+cBackground* background;
 cBackground* background2;
 
 // Four view panels
@@ -99,13 +104,6 @@ enum MouseState
     MOUSE_IDLE,
     MOUSE_SELECTION
 };
-
-
-// a world that contains all objects of the virtual environment
-cWorld* world;
-
-// a camera to render the world in the window display
-cCamera* camera;
 
 // a light source
 cSpotLight *light;
@@ -128,8 +126,6 @@ cMesh* object;
 // sphere objects
 cMesh* spheres;
 
-// a colored background
-cBackground* background;
 
 // a font for rendering text
 cFontPtr font;
@@ -139,9 +135,11 @@ cFontPtr fontPos;
 
 // a label to display the rate [Hz] at which the simulation is running
 cLabel* labelRates;
+cLabel* labelRates2;
 
 // a label to display the rate [Hz] at which the simulation is running
 cLabel* labelRatesPos;
+
 
 // a flag that indicates if the haptic simulation is currently running
 bool simulationRunning = false;
@@ -341,7 +339,7 @@ int main(int argc, char* argv[])
 
 
     //--------------------------------------------------------------------------
-    // WORLD - CAMERA - LIGHTING
+    // WORLD
     //--------------------------------------------------------------------------
     // create a new world.
     world = new cWorld();
@@ -350,46 +348,72 @@ int main(int argc, char* argv[])
     // the color is defined by its (R,G,B) components.
     world->m_backgroundColor.setWhite();
 
-
-    //-----------------------------------------
-
-    // create camera main
-    /*cameraMain = new cCamera(NULL);
-    world->addChild(cameraView1);
-    // set position and orientation
-    cameraView1->set(cVector3d(1.4, 0.0, 0.0),    // camera position (eye)
-        cVector3d(0.0, 0.0, 0.0),    // lookat position (target)
-        cVector3d(0.0, 0.0, 1.0));   // direction of the "up" vector
-
-    cameraView1->setClippingPlanes(0.01, 10.0);*/
-
-    
+    //--------------------------------------------------------------------------
+    // CAMERA
+    //--------------------------------------------------------------------------
 
     // create a camera and insert it into the virtual world
-    camera = new cCamera(world);
-    world->addChild(camera);
+    //camera = new cCamera(world);
+    camera = new cCamera(NULL);
+
+    cameraView1 = new cCamera(world);
+
+    world->addChild(cameraView1);
 
     // position and orient the camera
-    camera->set(cVector3d(1.4, 0.0, 0.0),    // camera position (eye)
-                cVector3d(0.0, 0.0, 0.0),    // lookat position (target)
-                cVector3d(0.0, 0.0, 1.0));   // direction of the "up" vector
+    cameraView1->set(cVector3d(1.43, 0.4, 0.860),    // camera position (eye)
+                    cVector3d(-0.732, -0.252, -0.63),    // lookat position (target)
+                    cVector3d(-0.602, -0.180, 0.773));   // direction of the "up" vector
 
-    // set the near and far clipping planes of the camera
-    // anything in front or behind these clipping planes will not be rendered
-    camera->setClippingPlanes(0.01, 10.0);
+// set the near and far clipping planes of the camera
+// anything in front or behind these clipping planes will not be rendered
+    cameraView1->setClippingPlanes(0.01, 10.0);
 
     // set stereo mode
-    camera->setStereoMode(stereoMode);
+    cameraView1->setStereoMode(stereoMode);
 
     // set stereo eye separation and focal length (applies only if stereo is enabled)
-    camera->setStereoEyeSeparation(0.03);
-    camera->setStereoFocalLength(3.0);
+    cameraView1->setStereoEyeSeparation(0.03);
+    cameraView1->setStereoFocalLength(3.0);
 
     // set vertical mirrored display mode
-    camera->setMirrorVertical(mirroredDisplay);
+    cameraView1->setMirrorVertical(mirroredDisplay);
 
     // set camera field of view 
-    camera->setFieldViewAngleDeg(45);
+    cameraView1->setFieldViewAngleDeg(45);
+
+    //create camera 2
+
+    cameraView2 = new cCamera(world);
+
+    world->addChild(cameraView2);
+
+    // position and orient the camera
+    cameraView2->set(cVector3d(1.5, 0.0, -0.27),    // camera position (eye)
+                    cVector3d(0.0, 0.0, 0.0),    // lookat position (target)
+                    cVector3d(0.0, 0.0, 1.0));   // direction of the "up" vector
+
+// set the near and far clipping planes of the camera
+// anything in front or behind these clipping planes will not be rendered
+    cameraView2->setClippingPlanes(0.01, 10.0);
+
+    // set stereo mode
+    cameraView2->setStereoMode(stereoMode);
+
+    // set stereo eye separation and focal length (applies only if stereo is enabled)
+    cameraView2->setStereoEyeSeparation(0.03);
+    cameraView2->setStereoFocalLength(3.0);
+
+    // set vertical mirrored display mode
+    cameraView2->setMirrorVertical(mirroredDisplay);
+
+    // set camera field of view 
+    cameraView2->setFieldViewAngleDeg(45);
+
+
+    //--------------------------------------------------------------------------
+    // LIGHT SOURCES
+    //--------------------------------------------------------------------------
 
     // create a light source
     light = new cSpotLight(world);
@@ -666,7 +690,7 @@ int main(int argc, char* argv[])
     //programShader->setUniformi("uShadowMap", 0);
     programShader->setUniformi("uNormalMap", 2);
     programShader->setUniformf("uInvRadius", 0.0f);
-    heightScale = 0.0;
+
 
     //--------------------------------------------------------------------------
    // CREATE SPHERES
@@ -721,7 +745,7 @@ int main(int argc, char* argv[])
 
     // define a default stiffness for the object
     //object->m_material->setStiffness(0.5 * maxStiffness);
-    spheres->m_material->setStiffness(0.5 * maxStiffness);
+    spheres->m_material->setStiffness(0.8 * maxStiffness);
 
     // define some static friction
     spheres->m_material->setStaticFriction(0.0); //0.2
@@ -779,33 +803,66 @@ int main(int argc, char* argv[])
     // link program shader
 
     //--------------------------------------------------------------------------
+// FRAMEBUFFERS
+//--------------------------------------------------------------------------
+
+    // create framebuffer for view 1
+    frameBuffer1 = cFrameBuffer::create();
+    frameBuffer1->setup(cameraView1);
+
+    // create framebuffer for view 2
+    frameBuffer2 = cFrameBuffer::create();
+    frameBuffer2->setup(cameraView2);
+
+    //--------------------------------------------------------------------------
+// VIEW PANELS
+//--------------------------------------------------------------------------
+
+    // create and setup view panel 1
+    viewPanel1 = new cViewPanel(frameBuffer1);
+    camera->m_frontLayer->addChild(viewPanel1);
+
+    // create and setup view panel 2
+    viewPanel2 = new cViewPanel(frameBuffer2);
+    camera->m_frontLayer->addChild(viewPanel2);
+
+    //--------------------------------------------------------------------------
     // WIDGETS
     //--------------------------------------------------------------------------
 
     // create a font
     font = NEW_CFONTCALIBRI20();
-    
+
     // create a label to display the haptic and graphic rate of the simulation
     labelRates = new cLabel(font);
-    camera->m_frontLayer->addChild(labelRates);
+    cameraView1->m_frontLayer->addChild(labelRates);
 
     // set font color
     labelRates->m_fontColor.setWhite();
 
-
-    // create a label to display the haptic and graphic rate of the simulation
-    labelRatesPos = new cLabel(font);
-    camera->m_frontLayer->addChild(labelRatesPos);
-
-    // set font color
-    labelRatesPos->m_fontColor.setWhite();
-
     // create a background
     background = new cBackground();
-    camera->m_backLayer->addChild(background);
+    cameraView1->m_backLayer->addChild(background);
 
     // set background properties
     background->setCornerColors(cColorf(0.3, 0.3, 0.3),
+                                cColorf(0.3, 0.3, 0.3),
+                                cColorf(0.1, 0.1, 0.1),
+                                cColorf(0.1, 0.1, 0.1));
+    //-----------------------------------------
+    // create a label to display the haptic and graphic rate of the simulation
+    labelRates2 = new cLabel(font);
+    cameraView2->m_frontLayer->addChild(labelRates2);
+
+    // set font color
+    labelRates2->m_fontColor.setWhite();
+
+    // create a background
+    background2 = new cBackground();
+    cameraView2->m_backLayer->addChild(background2);
+
+    // set background properties
+    background2->setCornerColors(cColorf(0.3, 0.3, 0.3),
                                 cColorf(0.3, 0.3, 0.3),
                                 cColorf(0.1, 0.1, 0.1),
                                 cColorf(0.1, 0.1, 0.1));
@@ -827,6 +884,11 @@ int main(int argc, char* argv[])
     
     //object->setShowTangents(true);
     //object->setNormalsProperties(0.5, cColorf(0.1, 0.8, 0.2));
+
+    
+    heightScale = 0.0;
+    //object->heighC = 0.3125 * heightScale + 0.01;
+    object->heighC = 0.45977 * heightScale + 0.01;
 
     //--------------------------------------------------------------------------
     // MAIN GRAPHIC LOOP
@@ -853,7 +915,7 @@ int main(int argc, char* argv[])
         //programShader2->setUniformf("heightScale", heightScale);
 
         //print scale relieve
-        //cout << heightScale << endl;
+        cout << heightScale <<", "<< object->heighC << endl;
 
         // signal frequency counter
         freqCounterGraphics.signal(1);
@@ -876,6 +938,21 @@ void windowSizeCallback(GLFWwindow* a_window, int a_width, int a_height)
     // update window size
     width  = a_width;
     height = a_height;
+
+    int halfW = width / 2;
+    int halfH = height;
+    int offset = 1;
+
+    // update display panel sizes and positions
+    viewPanel1->setLocalPos(0.0, 0.0);
+    viewPanel1->setSize(halfW, halfH);
+
+    viewPanel2->setLocalPos(halfW, 0.0);
+    viewPanel2->setSize(halfW, halfH);
+
+    // update frame buffer sizes
+    frameBuffer1->setSize(halfW, halfH);
+    frameBuffer2->setSize(halfW, halfH);
 }
 
 //------------------------------------------------------------------------------
@@ -943,6 +1020,8 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
             heightScale -= 0.0005f;
         else
             heightScale = 0.0f;
+       // object->heighC = 0.3125 * heightScale + 0.01; 
+        object->heighC = 0.45977 * heightScale + 0.01;
     }
     else if (a_key == GLFW_KEY_E)
     {
@@ -950,31 +1029,48 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
             heightScale += 0.0005f;
         else
             heightScale = 1.0f;
+        //object->heighC = 0.3125 * heightScale + 0.01;
+        object->heighC = 0.45977 * heightScale + 0.01;
+    }
+    // option - chage Scale of height Depth
+    else if (a_key == GLFW_KEY_T)
+    {
+        object->heighC -= 0.005f;
+    }
+    else if (a_key == GLFW_KEY_Y)
+    {
+        object->heighC += 0.005f;
     }
     //----------------MOVE-----------------
     else if (a_key == GLFW_KEY_W)
     {
-        camera->setLocalPos(camera->getLocalPos()+cVector3d(-0.01,0.0,0.0));
+        cameraView1->setLocalPos(cameraView1->getLocalPos()+cVector3d(-0.01,0.0,0.0));
     }
     else if (a_key == GLFW_KEY_S)
     {
-        camera->setLocalPos(camera->getLocalPos() + cVector3d(0.01, 0.0, 0.0));
+        cameraView1->setLocalPos(cameraView1->getLocalPos() + cVector3d(0.01, 0.0, 0.0));
     }
     else if (a_key == GLFW_KEY_A)
     {
-        camera->setLocalPos(camera->getLocalPos() + cVector3d(0.0, -0.01, 0.0));
+        cameraView1->setLocalPos(cameraView1->getLocalPos() + cVector3d(0.0, -0.01, 0.0));
     }
     else if (a_key == GLFW_KEY_D)
     {
-        camera->setLocalPos(camera->getLocalPos() + cVector3d(0.0, 0.01, 0.0));
+        cameraView1->setLocalPos(cameraView1->getLocalPos() + cVector3d(0.0, 0.01, 0.0));
     }
     else if (a_key == GLFW_KEY_Z)
     {
-        camera->setLocalPos(camera->getLocalPos() + cVector3d(0.0, 0.00, -0.01));
+        cameraView1->setLocalPos(cameraView1->getLocalPos() + cVector3d(0.0, 0.00, -0.01));
     }
     else if (a_key == GLFW_KEY_X)
     {
-        camera->setLocalPos(camera->getLocalPos() + cVector3d(0.0, 0.0, 0.01));
+        cameraView1->setLocalPos(cameraView1->getLocalPos() + cVector3d(0.0, 0.0, 0.01));
+    }
+    else if (a_key == GLFW_KEY_U)
+    {
+        cout << cameraView1->getLocalPos().str(3) << endl;
+        cout << cameraView1->getLookVector().str(3) << endl;
+        cout << cameraView1->getUpVector().str(3) << endl;
     }
 }
 
@@ -1010,8 +1106,8 @@ void mouseMotionCallback(GLFWwindow* a_window, double a_posX, double a_posY)
         double Xnew = mouseX - a_posX;
         double Ynew = mouseY - a_posY;
         //cout << Xnew << endl;
-        camera->rotateAboutLocalAxisDeg(cVector3d(0.0,0.0,1.0),Xnew/100.0);
-        camera->rotateAboutLocalAxisDeg(cVector3d(0.0, 1.0, 0.0), Ynew / 100.0);
+        cameraView1->rotateAboutLocalAxisDeg(cVector3d(0.0,0.0,1.0),Xnew/100.0);
+        cameraView1->rotateAboutLocalAxisDeg(cVector3d(0.0, 1.0, 0.0), Ynew / 100.0);
         
         //cout << "hola" << endl;
 
@@ -1084,12 +1180,19 @@ void updateGraphics(void)
     // update position of label
     labelRates->setLocalPos((int)(0.5 * (width - labelRates->getWidth())), 15);
 
-    cVector3d posA = tool->getDeviceGlobalPos();
     // update haptic and graphic rate data
-    labelRatesPos->setText("Position Tool : " + posA.str(3));
+    labelRates2->setText(cStr(freqCounterGraphics.getFrequency(), 0) + " Hz / " +
+        cStr(freqCounterHaptics.getFrequency(), 0) + " Hz");
 
     // update position of label
-    labelRatesPos->setLocalPos((int)(0.5 * (width - labelRatesPos->getWidth())), 30);
+    labelRates2->setLocalPos((int)(0.5 * (width - labelRates2->getWidth())), 15);
+
+    cVector3d posA = tool->getDeviceGlobalPos();
+    // update haptic and graphic rate data
+    /*labelRatesPos->setText("Position Tool : " + posA.str(3));
+
+    // update position of label
+    labelRatesPos->setLocalPos((int)(0.5 * (width - labelRatesPos->getWidth())), 30);*/
 
 
     /////////////////////////////////////////////////////////////////////
@@ -1098,6 +1201,10 @@ void updateGraphics(void)
 
     // update shadow maps (if any)
     //world->updateShadowMaps(false, mirroredDisplay);
+
+    // render all framebuffers
+    frameBuffer1->renderView();
+    frameBuffer2->renderView();
 
     // render world
     camera->renderView(width, height);

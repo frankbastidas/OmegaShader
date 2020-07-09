@@ -1,3 +1,9 @@
 08-shaders-VS2012.vcxproj
 obj
 .vs
+08-shaders-VS2012.vcxproj.filters
+08-shaders-VS2013.vcxproj
+08-shaders-VS2013.vcxproj.filters
+08-shaders-VS2015.vcxproj
+08-shaders-VS2015.vcxproj.filters
+08-shaders-VS2015.vcxproj.user

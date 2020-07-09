@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="08-shaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\bin\resources\shaders\bump.frag" />
+    <None Include="..\..\..\bin\resources\shaders\bump.vert" />
+    <None Include="..\..\..\bin\resources\shaders\parallaxmapping.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\bin\resources\shaders\parallaxmapping.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\bin\resources\shaders\ReliefMapping.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\bin\resources\shaders\ReliefMapping.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\bin\resources\shaders\isosurface.frag" />
+    <None Include="..\..\..\bin\resources\shaders\isosurface.vert" />
+    <None Include="..\..\..\bin\resources\shaders\simple.frag" />
+    <None Include="..\..\..\bin\resources\shaders\simple.vert" />
+    <None Include="..\..\..\bin\resources\shaders\directvolume.frag" />
+    <None Include="..\..\..\bin\resources\shaders\directvolume.vert" />
+    <None Include="..\..\..\bin\resources\shaders\phong.frag" />
+    <None Include="..\..\..\bin\resources\shaders\phong.vert" />
+    <None Include="..\..\..\bin\resources\shaders\shadow.frag" />
+    <None Include="..\..\..\bin\resources\shaders\shadow.vert" />
+  </ItemGroup>
+</Project>

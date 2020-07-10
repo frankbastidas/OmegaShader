@@ -243,9 +243,7 @@ int main(int argc, char* argv[])
 
     cout << endl;
     cout << "-----------------------------------" << endl;
-    cout << "CHAI3D" << endl;
-    cout << "Demo: 08-shaders" << endl;
-    cout << "Copyright 2003-2016" << endl;
+    cout << "Final Project" << endl;
     cout << "-----------------------------------" << endl << endl << endl;
     cout << "Keyboard Options:" << endl << endl;
     cout << "[f] - Enable/Disable full screen mode" << endl;
@@ -294,7 +292,7 @@ int main(int argc, char* argv[])
     }
 
     // create display context
-    window = glfwCreateWindow(w, h, "CHAI3D", NULL, NULL);
+    window = glfwCreateWindow(w, h, "Final Project", NULL, NULL);
     if (!window)
     {
         cout << "failed to create window" << endl;
@@ -464,7 +462,7 @@ int main(int argc, char* argv[])
     tool->setRadius(toolRadius);
 
     // set color of proxy sphere
-    tool->m_hapticPoint->m_sphereProxy->m_material->setWhite();
+    tool->m_hapticPoint->m_sphereProxy->m_material->setGreenLimeGreen();
 
     // show proxy and device position of finger-proxy algorithm
     tool->setShowContactPoints(true, true, cColorf(0.0, 0.0, 0.0));
@@ -704,7 +702,7 @@ int main(int argc, char* argv[])
 
     spheres->setLocalPos(tool->getDeviceGlobalPos());
 
-    cCreateSphere(spheres, toolRadius);
+    cCreateSphere(spheres, toolRadius*1.01);
     //cCreateBox(spheres, toolRadius*2, toolRadius*2, toolRadius*2);
 
    // create texture
@@ -915,7 +913,7 @@ int main(int argc, char* argv[])
         //programShader2->setUniformf("heightScale", heightScale);
 
         //print scale relieve
-        cout << heightScale <<", "<< object->heighC << endl;
+        //cout << heightScale <<", "<< object->heighC << endl;
 
         // signal frequency counter
         freqCounterGraphics.signal(1);
